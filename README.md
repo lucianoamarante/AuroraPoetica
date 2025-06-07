@@ -16,7 +16,8 @@
 
 <div align="center">
 
-![image](https://github.com/user-attachments/assets/495380f2-8cfd-42e6-b5a0-e14598c4b509)
+
+![og-img](https://github.com/user-attachments/assets/0d408cd7-7090-40bb-8de4-e3ff131256e1)
 
   
   <h3>Experience Poetry in a New Dimension</h3>
@@ -157,5 +158,5 @@ This project is open source and available under the MIT License.
 
 ---
 
-![og-img](https://github.com/user-attachments/assets/0d408cd7-7090-40bb-8de4-e3ff131256e1)
+
 
