@@ -1,4 +1,9 @@
+<div align="center">
+  
 # Aurora Poetica 🌌
+[Live Demo](https://drbaph.is-a.dev/AuroraPoetica/)
+
+</div>
 
 <div align="center">
   <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white" alt="HTML5" />
@@ -69,7 +74,9 @@ npx serve
 ```
 Poems/
 ├── index.html          # Main application file
+├── favicon.svg         # Favicon
 ├── 404.html           # Custom 404 error page
+├── LICENSE            # MIT
 └── README.md          # Project documentation
 ```
 
@@ -139,10 +146,6 @@ Automatically handles API failures with intelligent fallbacks:
 
 ### Dynamic Word Cloud Generation
 Uses D3.js to create floating word visualizations from poem content, filtering out common words and sizing based on frequency.
-
-## 🔗 Links
-- [Live Demo](https://saganaki22.github.io/Poems/)
-- [GitHub Repository](https://github.com/Saganaki22/Poems)
 
 ## 📜 License
 This project is open source and available under the MIT License.
