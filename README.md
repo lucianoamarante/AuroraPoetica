@@ -153,6 +153,5 @@ This project is open source and available under the MIT License.
 
 ---
 
-<div align="center">
-  <p>Crafted with 💜 for poetry lovers everywhere</p>
-</div>
+![og-img](https://github.com/user-attachments/assets/0d408cd7-7090-40bb-8de4-e3ff131256e1)
+
