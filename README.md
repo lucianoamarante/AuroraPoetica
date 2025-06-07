@@ -76,6 +76,7 @@ Poems/
 ├── index.html          # Main application file
 ├── favicon.svg         # Favicon
 ├── 404.html           # Custom 404 error page
+├── og-img.jpg         # OG Image
 ├── LICENSE            # MIT
 └── README.md          # Project documentation
 ```
