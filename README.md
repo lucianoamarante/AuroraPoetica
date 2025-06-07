@@ -15,6 +15,10 @@
 </div>
 
 <div align="center">
+
+![image](https://github.com/user-attachments/assets/495380f2-8cfd-42e6-b5a0-e14598c4b509)
+
+  
   <h3>Experience Poetry in a New Dimension</h3>
   <p>An immersive, interactive poetry discovery platform with cutting-edge visual effects</p>
 </div>
