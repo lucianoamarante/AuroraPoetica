@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Aurora Poetica | Immersive Poetry Experience</title>
+    <meta name="description" content="Experience poetry in a new dimension with Aurora Poetica. An immersive web application that brings classic poems to life with stunning visual effects and interactive elements.">
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon.svg">
+    <link rel="icon" type="image/svg+xml" sizes="32x32" href="favicon.svg">
+    <link rel="icon" type="image/svg+xml" sizes="16x16" href="favicon.svg">
+    <link rel="shortcut icon" href="favicon.svg">
+    <meta property="og:title" content="Aurora Poetica | Immersive Poetry Experience">
+    <meta property="og:description" content="Experience poetry in a new dimension with Aurora Poetica. An immersive web application that brings classic poems to life with stunning visual effects and interactive elements.">
+    <meta property="og:image" content="https://i.ibb.co/whdRGFKn/og-img.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://drbaph.is-a.dev/AuroraPoetica/">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Aurora Poetica | Immersive Poetry Experience">
+    <meta name="twitter:description" content="Experience poetry in a new dimension with Aurora Poetica. An immersive web application that brings classic poems to life with stunning visual effects and interactive elements.">
+    <meta name="twitter:image" content="https://i.ibb.co/whdRGFKn/og-img.jpg">
+    
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        * { -webkit-tap-highlight-color: transparent; -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; }
+        #poem-lines * { -webkit-user-select: text; user-select: text; }
+        :root { --neon-teal: #00ffcc; --neon-purple: #9945ff; --neon-pink: #ff0080; --glass-bg: rgba(12, 12, 20, 0.4); --glass-border: rgba(255, 255, 255, 0.08); }
+        @keyframes aurora { 0%, 100% { transform: translateY(0) rotate(0deg) scale(1); } 33% { transform: translateY(-20px) rotate(120deg) scale(1.1); } 66% { transform: translateY(20px) rotate(240deg) scale(0.9); } }
+        @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-20px); } }
+        @keyframes pulse-glow { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+        @keyframes fade-in-float {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        body { font-family: 'Space Grotesk', sans-serif; background: #000; overflow-x: hidden; position: relative; min-height: 100vh; }
+        .aurora-bg { position: fixed; inset: 0; overflow: hidden; z-index: 0; }
+        .aurora-bg::before, .aurora-bg::after { content: ''; position: absolute; width: 200%; height: 200%; background: radial-gradient(circle, var(--neon-teal) 0%, transparent 50%), radial-gradient(circle, var(--neon-purple) 0%, transparent 50%), radial-gradient(circle, var(--neon-pink) 0%, transparent 50%); filter: blur(80px); opacity: 0.3; animation: aurora 20s ease-in-out infinite; }
+        .aurora-bg::after { animation-delay: -10s; animation-direction: reverse; }
+        .particle { position: absolute; width: 4px; height: 4px; background: var(--neon-teal); border-radius: 50%; filter: blur(1px); animation: float 6s ease-in-out infinite; }
+        .glass-card { background: var(--glass-bg); backdrop-filter: blur(20px) saturate(200%); -webkit-backdrop-filter: blur(20px) saturate(200%); border: 1px solid var(--glass-border); border-radius: 24px; box-shadow: 0 0 40px rgba(0, 255, 204, 0.1), 0 0 80px rgba(153, 69, 255, 0.1), inset 0 0 20px rgba(255, 255, 255, 0.03); position: relative; overflow: hidden; transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1); }
+        .glass-card:hover { box-shadow: 0 0 60px rgba(0, 255, 204, 0.2), 0 0 120px rgba(153, 69, 255, 0.2), inset 0 0 30px rgba(255, 255, 255, 0.05); transform: translateY(-2px); }
+        .neon-text { background: linear-gradient(135deg, var(--neon-teal), var(--neon-purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; text-shadow: 0 0 40px rgba(0, 255, 204, 0.5); animation: pulse-glow 3s ease-in-out infinite; }
+        .neon-text-pink { background: linear-gradient(135deg, var(--neon-pink), var(--neon-purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; text-shadow: 0 0 30px rgba(255, 0, 128, 0.5); }
+        .neon-button { background: linear-gradient(135deg, var(--neon-teal), var(--neon-purple)); color: white; font-weight: 600; padding: 16px 32px; border-radius: 9999px; position: relative; overflow: hidden; transition: transform 0.2s; box-shadow: 0 0 20px rgba(0, 255, 204, 0.3), 0 4px 15px rgba(0, 0, 0, 0.3); }
+        .neon-button::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, transparent, rgba(255, 255, 255, 0.3), transparent); transform: translateX(-100%); transition: transform 0.6s; }
+        .neon-button:hover::before { transform: translateX(100%); }
+        .neon-button:hover { transform: scale(1.05); box-shadow: 0 0 30px rgba(0, 255, 204, 0.5), 0 6px 20px rgba(0, 0, 0, 0.4); }
+        .neon-button:active { transform: scale(0.98); }
+        .theme-pill { background: var(--glass-bg); border: 1px solid var(--glass-border); color: #888; padding: 10px 24px; border-radius: 9999px; transition: all 0.3s; cursor: pointer; font-weight: 500; backdrop-filter: blur(10px); }
+        .theme-pill:hover { background: rgba(255, 255, 255, 0.05); color: #fff; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); }
+        input[type="radio"]:checked + .theme-pill { background: linear-gradient(135deg, var(--neon-teal), var(--neon-purple)); color: #000; font-weight: 600; border-color: transparent; box-shadow: 0 0 20px rgba(0, 255, 204, 0.4), 0 4px 15px rgba(0, 0, 0, 0.3); }
+        .loader { width: 60px; height: 60px; position: relative; }
+        .loader-ring { position: absolute; inset: 0; border: 3px solid transparent; border-top-color: var(--neon-teal); border-radius: 50%; animation: spin 1s linear infinite; }
+        .loader-ring:nth-child(2) { inset: 8px; border-top-color: var(--neon-purple); animation-delay: -0.5s; }
+        .loader-ring:nth-child(3) { inset: 16px; border-top-color: var(--neon-pink); animation-delay: -0.25s; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        @keyframes slide-up { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .poem-line { animation: slide-up 0.6s ease-out forwards; opacity: 0; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.05); border-radius: 3px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: linear-gradient(to bottom, var(--neon-teal), var(--neon-purple)); border-radius: 3px; }
+        .github-icon { position: fixed; bottom: 20px; right: 20px; width: 48px; height: 48px; background: var(--glass-bg); backdrop-filter: blur(10px); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1px solid var(--glass-border); transition: all 0.3s; z-index: 1000; }
+        .github-icon:hover { transform: scale(1.1); background: rgba(255, 255, 255, 0.1); box-shadow: 0 0 20px rgba(0, 255, 204, 0.3); }
+        .github-icon svg { width: 24px; height: 24px; fill: #fff; }
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 20px;
+            padding: 12px 24px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 9999px;
+            transition: all 0.3s;
+        }
+        .toggle-container:hover {
+            background: rgba(255, 255, 255, 0.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        .toggle-label {
+            color: #888;
+            font-weight: 500;
+            font-size: 16px;
+            transition: color 0.3s;
+        }
+        .toggle-switch {
+            position: relative;
+            width: 56px;
+            height: 28px;
+            cursor: pointer;
+        }
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .toggle-slider {
+            position: absolute;
+            inset: 0;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--glass-border);
+            border-radius: 9999px;
+            transition: all 0.3s;
+        }
+        .toggle-slider::before {
+            content: '';
+            position: absolute;
+            height: 20px;
+            width: 20px;
+            left: 4px;
+            bottom: 3px;
+            background: #666;
+            border-radius: 50%;
+            transition: all 0.3s;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        .toggle-switch input:checked + .toggle-slider {
+            background: linear-gradient(135deg, var(--neon-teal), var(--neon-purple));
+            border-color: transparent;
+            box-shadow: 0 0 15px rgba(0, 255, 204, 0.4);
+        }
+        .toggle-switch input:checked + .toggle-slider::before {
+            transform: translateX(28px);
+            background: white;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+        }
+        .toggle-container:has(input:checked) .toggle-label {
+            color: #ddd;
+        }
+        @media (max-width: 768px) { 
+            .neon-button { padding: 12px 24px; font-size: 14px; } 
+            .theme-pill { padding: 8px 20px; font-size: 14px; } 
+            .github-icon { width: 40px; height: 40px; bottom: 16px; right: 16px; } 
+            .github-icon svg { width: 20px; height: 20px; }
+            .toggle-container { padding: 10px 20px; margin-top: 16px; }
+            .toggle-label { font-size: 14px; }
+            .toggle-switch { width: 48px; height: 24px; }
+            .toggle-slider::before { height: 18px; width: 18px; left: 3px; bottom: 2px; }
+            .toggle-switch input:checked + .toggle-slider::before { transform: translateX(24px); }
+        }
+        @keyframes float-word {
+            0%, 100% { 
+                transform: translateY(0px) translateX(0px) rotate(0deg) scale(1);
+                opacity: 0.4;
+            }
+            25% { 
+                transform: translateY(-30px) translateX(20px) rotate(90deg) scale(1.1);
+                opacity: 0.5;
+            }
+            50% { 
+                transform: translateY(20px) translateX(-30px) rotate(180deg) scale(0.9);
+                opacity: 0.3;
+            }
+            75% { 
+                transform: translateY(-10px) translateX(10px) rotate(270deg) scale(1.05);
+                opacity: 0.45;
+            }
+        }
+        #word-cloud-container { position: fixed; inset: 0; opacity: 1; z-index: 1; pointer-events: none; }
+        .floating-word { 
+            position: absolute;
+            cursor: default; 
+            transition: opacity 2s ease;
+            mix-blend-mode: screen;
+        }
+    </style>
+</head>
+<body class="text-gray-100 antialiased">
+    
+    <div class="aurora-bg"></div>
+    <div id="particles"></div>
+    <div id="word-cloud-container"></div>
+    
+    <div class="relative z-10 min-h-screen flex flex-col items-center justify-center p-4">
+        <div class="w-full max-w-5xl mx-auto">
+            <header class="text-center mb-8">
+                <h1 class="text-5xl md:text-7xl font-bold mb-2 neon-text">Aurora Poetica</h1>
+                <p class="text-lg md:text-xl text-gray-400">Experience Poetry in a New Dimension</p>
+            </header>
+
+            <div class="flex flex-wrap justify-center gap-3 mb-8">
+                <label class="relative"><input type="radio" name="theme" value="random" checked class="sr-only"><div class="theme-pill">Random</div></label>
+                <label class="relative"><input type="radio" name="theme" value="love" class="sr-only"><div class="theme-pill">Love</div></label>
+                <label class="relative"><input type="radio" name="theme" value="nature" class="sr-only"><div class="theme-pill">Nature</div></label>
+                <label class="relative"><input type="radio" name="theme" value="melancholy" class="sr-only"><div class="theme-pill">Melancholy</div></label>
+                <label class="relative"><input type="radio" name="theme" value="mythology" class="sr-only"><div class="theme-pill">Mythology</div></label>
+            </div>
+
+            <div class="text-center mb-8">
+                <button id="generate-btn" class="neon-button">Conjure New Verse</button>
+            </div>
+
+            <div id="poem-card" class="glass-card p-6 md:p-10 max-h-[70vh] flex flex-col">
+                <div id="loader" class="hidden absolute inset-0 flex flex-col items-center justify-center bg-black/50 rounded-3xl z-20">
+                    <div class="loader"><div class="loader-ring"></div><div class="loader-ring"></div><div class="loader-ring"></div></div>
+                    <p class="mt-4 text-gray-300">Summoning verses...</p>
+                </div>
+                <div id="error" class="hidden absolute inset-0 flex items-center justify-center p-8 z-20">
+                    <div class="glass-card p-6 text-center max-w-md">
+                        <div class="mb-4"><svg class="w-16 h-16 mx-auto text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg></div>
+                        <h3 class="text-xl font-bold text-red-400 mb-2">Oops! Something went wrong</h3>
+                        <p class="text-gray-400 mb-4">Unable to fetch poem. The poetry muses seem to be taking a break.</p>
+                        <button onclick="location.reload()" class="text-teal-400 hover:text-teal-300 underline">Try refreshing the page</button>
+                    </div>
+                </div>
+                <div id="poem-content" class="relative">
+                    <h2 id="poem-title" class="text-2xl md:text-4xl font-bold mb-2 font-serif neon-text-pink"></h2>
+                    <h3 id="poem-author" class="text-lg md:text-xl text-gray-400 mb-6 italic"></h3>
+                    <div class="custom-scrollbar overflow-y-auto max-h-[50vh] pr-2">
+                        <div id="poem-lines" class="space-y-3 text-gray-200 font-serif leading-relaxed text-base md:text-lg"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="toggle-container mx-auto w-fit">
+                <label class="toggle-label" for="floating-text-toggle">Floating Text:</label>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="floating-text-toggle" checked>
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <a href="https://github.com/Saganaki22/AuroraPoetica" target="_blank" rel="noopener noreferrer" class="github-icon">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+    </a>
+
+    <script>
+        const particlesContainer = document.getElementById('particles');
+        for (let i = 0; i < 30; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.top = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 6 + 's';
+            particle.style.animationDuration = (Math.random() * 4 + 4) + 's';
+            particlesContainer.appendChild(particle);
+        }
+
+        const API_BASE_URL = 'https://poetrydb.org';
+        const themeAuthors = { love: 'William Shakespeare;Robert Burns;Elizabeth Barrett Browning;John Keats', nature: 'William Wordsworth;Robert Frost;Emily Dickinson;Walt Whitman', melancholy: 'Edgar Allan Poe;Emily Dickinson;William Blake;Percy Bysshe Shelley', mythology: 'John Keats;William Blake;Percy Bysshe Shelley;Lord Byron' };
+        const themeColors = { random: ['#00ffcc', '#9945ff', '#ff0080', '#00ff88', '#ffaa00'], love: ['#ff0080', '#ff4488', '#ff66aa', '#ff88cc', '#ffaaee'], nature: ['#00ff88', '#44ff88', '#88ff88', '#00ffaa', '#44ffaa'], melancholy: ['#4488ff', '#6688ff', '#8888ff', '#aaaaff', '#ccccff'], mythology: ['#ffaa00', '#ffbb44', '#ffcc66', '#ffdd88', '#ffeeaa'] };
+
+        const generateBtn = document.getElementById('generate-btn');
+        const poemCard = document.getElementById('poem-card');
+        const poemContent = document.getElementById('poem-content');
+        const poemTitle = document.getElementById('poem-title');
+        const poemAuthor = document.getElementById('poem-author');
+        const poemLines = document.getElementById('poem-lines');
+        const loader = document.getElementById('loader');
+        const error = document.getElementById('error');
+        const wordCloudContainer = document.getElementById('word-cloud-container');
+
+        // Default poetry words for initial word cloud
+        const defaultPoetryWords = [
+            { text: 'verse', size: 30 }, { text: 'poetry', size: 40 }, { text: 'dream', size: 35 },
+            { text: 'soul', size: 28 }, { text: 'heart', size: 32 }, { text: 'love', size: 38 },
+            { text: 'night', size: 25 }, { text: 'light', size: 30 }, { text: 'beauty', size: 33 },
+            { text: 'time', size: 27 }, { text: 'eternal', size: 24 }, { text: 'spirit', size: 29 },
+            { text: 'nature', size: 31 }, { text: 'stars', size: 26 }, { text: 'moon', size: 25 },
+            { text: 'silence', size: 22 }, { text: 'whisper', size: 24 }, { text: 'infinite', size: 28 },
+            { text: 'Aurora', size: 42 }, { text: 'Poetica', size: 42 }
+        ];
+
+        async function fetchAndDisplayPoem(retryCount = 0) {
+            const selectedTheme = document.querySelector('input[name="theme"]:checked').value;
+            loader.classList.remove('hidden');
+            error.classList.add('hidden');
+            poemContent.style.opacity = '0';
+            try {
+                let url = (selectedTheme === 'random') ? `${API_BASE_URL}/random/1` : `${API_BASE_URL}/author/${encodeURIComponent(themeAuthors[selectedTheme].split(';')[Math.floor(Math.random() * themeAuthors[selectedTheme].split(';').length)])}`;
+                const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('Request timeout')), 8000));
+                const response = await Promise.race([fetch(url), timeoutPromise]);
+                const data = await response.json();
+                if (!response.ok || !data || (Array.isArray(data) && data.length === 0) || data.status === 404 || data.status === 400 || (data.reason && data.reason.includes('Not found'))) {
+                    if (retryCount < 2 && selectedTheme !== 'random') { return fetchAndDisplayPoem(retryCount + 1); }
+                    if (retryCount < 3 && selectedTheme !== 'random') { document.querySelector('input[value="random"]').checked = true; return fetchAndDisplayPoem(3); }
+                    throw new Error('No poem found');
+                }
+                const poems = Array.isArray(data) ? data : [data];
+                const validPoems = poems.filter(p => p && p.lines && p.title && p.author);
+                if (validPoems.length === 0) { throw new Error('No valid poems in response'); }
+                const poem = validPoems[Math.floor(Math.random() * validPoems.length)];
+                displayPoem(poem);
+                generateWordCloud(poem.lines, selectedTheme);
+            } catch (err) {
+                console.error('Error fetching poem:', err);
+                error.classList.remove('hidden');
+            } finally {
+                loader.classList.add('hidden');
+            }
+        }
+
+        function displayPoem(poem) {
+            poemTitle.textContent = poem.title;
+            poemAuthor.textContent = `by ${poem.author}`;
+            poemLines.innerHTML = '';
+            poem.lines.forEach((line, index) => {
+                const lineElement = document.createElement('div');
+                lineElement.className = 'poem-line';
+                lineElement.textContent = line || '\u00A0';
+                lineElement.style.animationDelay = `${index * 50}ms`;
+                poemLines.appendChild(lineElement);
+            });
+            poemContent.style.opacity = '1';
+        }
+
+        function generateWordCloud(lines, theme) {
+            if (!floatingTextEnabled) return;
+            
+            const text = lines ? lines.join(' ').toLowerCase() : '';
+            const words = text.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "").split(/\s+/);
+            const stopWords = new Set(['i','me','my','we','our','you','your','he','him','his','she','her','it','its','they','them','a','an','the','and','but','if','or','as','of','at','by','for','with','to','from','in','out','on','off','so','s','t','o','thy','thee','thou','hath']);
+            const wordCounts = {};
+            
+            if (lines && lines.length > 0) {
+                words.forEach(word => { 
+                    if (word && !stopWords.has(word) && word.length > 2) { 
+                        wordCounts[word] = (wordCounts[word] || 0) + 1; 
+                    } 
+                });
+            }
+            
+            let wordData = Object.entries(wordCounts).map(([text, size]) => ({ text, size }))
+                .sort((a, b) => b.size - a.size).slice(0, 30);
+            
+            // Use default words if no poem or not enough words
+            if (wordData.length < 5) {
+                wordData = defaultPoetryWords;
+            }
+
+            wordCloudContainer.innerHTML = '';
+
+            const { clientWidth: width, clientHeight: height } = wordCloudContainer;
+            
+            const colorScale = themeColors[theme] || themeColors.random;
+            
+            // Create floating words distributed across the entire viewport
+            wordData.forEach((word, i) => {
+                const wordElement = document.createElement('div');
+                wordElement.className = 'floating-word';
+                wordElement.textContent = word.text;
+                
+                // Random positioning across the viewport
+                const x = Math.random() * (width - 200);
+                const y = Math.random() * (height - 100);
+                const fontSize = Math.max(20, Math.min(60, word.size * 1.5));
+                const color = colorScale[i % colorScale.length];
+                const rotation = Math.random() * 360;
+                
+                wordElement.style.cssText = `
+                    position: absolute;
+                    left: ${x}px;
+                    top: ${y}px;
+                    font-size: ${fontSize}px;
+                    font-family: 'Space Grotesk', sans-serif;
+                    font-weight: 600;
+                    color: ${color};
+                    opacity: 0;
+                    transform: rotate(${rotation}deg);
+                    animation: float-word ${20 + Math.random() * 15}s ease-in-out infinite;
+                    animation-delay: ${Math.random() * 5}s;
+                    filter: blur(0.5px);
+                    pointer-events: none;
+                `;
+                
+                wordCloudContainer.appendChild(wordElement);
+                
+                // Fade in
+                setTimeout(() => {
+                    wordElement.style.opacity = '0.4';
+                    wordElement.style.transition = 'opacity 2s ease-in';
+                }, i * 100);
+            });
+        }
+
+        // Initialize with default word cloud immediately
+        let floatingTextEnabled = true;
+        const savedPreference = sessionStorage.getItem('floatingTextEnabled');
+        if (savedPreference !== null) {
+            floatingTextEnabled = savedPreference === 'true';
+            document.getElementById('floating-text-toggle').checked = floatingTextEnabled;
+        }
+        
+        if (floatingTextEnabled) {
+            generateWordCloud(null, 'random');
+        } else {
+            wordCloudContainer.style.display = 'none';
+        }
+
+        // Toggle floating text functionality
+        const floatingTextToggle = document.getElementById('floating-text-toggle');
+        floatingTextToggle.addEventListener('change', (e) => {
+            floatingTextEnabled = e.target.checked;
+            sessionStorage.setItem('floatingTextEnabled', floatingTextEnabled);
+            
+            if (floatingTextEnabled) {
+                const selectedTheme = document.querySelector('input[name="theme"]:checked').value;
+                wordCloudContainer.style.display = 'block';
+                generateWordCloud(poemLines.innerText ? poemLines.innerText.split('\n').filter(line => line.trim()) : null, selectedTheme);
+            } else {
+                wordCloudContainer.style.display = 'none';
+                wordCloudContainer.innerHTML = '';
+            }
+        });
+
+        let isTouch = false;
+        poemCard.addEventListener('mousemove', (e) => { 
+            if (isTouch) return; 
+            const rect = poemCard.getBoundingClientRect(); 
+            const x = e.clientX - rect.left; 
+            const y = e.clientY - rect.top; 
+            const centerX = rect.width / 2; 
+            const centerY = rect.height / 2; 
+            const rotateX = (y - centerY) / centerY * -10; 
+            const rotateY = (x - centerX) / centerX * 10; 
+            poemCard.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`; 
+        });
+        poemCard.addEventListener('mouseleave', () => { 
+            poemCard.style.transform = 'perspective(1000px) rotateX(0) rotateY(0)'; 
+        });
+        poemCard.addEventListener('touchstart', () => { isTouch = true; });
+        
+        generateBtn.addEventListener('click', () => fetchAndDisplayPoem(0));
+        
+        // Change word cloud when theme changes
+        document.querySelectorAll('input[name="theme"]').forEach(input => {
+            input.addEventListener('change', (e) => {
+                if (floatingTextEnabled) {
+                    const selectedTheme = e.target.value;
+                    generateWordCloud(null, selectedTheme);
+                }
+            });
+        });
+        
+        // Fetch initial poem
+        fetchAndDisplayPoem();
+    </script>
+</body>
+</html>

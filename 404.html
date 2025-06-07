@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>404 - Page Not Found | Aurora Poetica</title>
+    <meta name="description" content="Experience poetry in a new dimension with Aurora Poetica. An immersive web application that brings classic poems to life with stunning visual effects and interactive elements.">
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon.svg">
+    <link rel="icon" type="image/svg+xml" sizes="32x32" href="favicon.svg">
+    <link rel="icon" type="image/svg+xml" sizes="16x16" href="favicon.svg">
+    <link rel="manifest" href="favicon/webmanifest.json">
+    <link rel="shortcut icon" href="favicon.svg">
+    <meta property="og:title" content="404 - Page Not Found | Aurora Poetica">
+    <meta property="og:description" content="Experience poetry in a new dimension with Aurora Poetica. An immersive web application that brings classic poems to life with stunning visual effects and interactive elements.">
+    <meta property="og:image" content="https://i.ibb.co/whdRGFKn/og-img.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://drbaph.is-a.dev/AuroraPoetica/">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="404 - Page Not Found | Aurora Poetica">
+    <meta name="twitter:description" content="Experience poetry in a new dimension with Aurora Poetica. An immersive web application that brings classic poems to life with stunning visual effects and interactive elements.">
+    <meta name="twitter:image" content="https://i.ibb.co/whdRGFKn/og-img.jpg">
+
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        /* Reset tap highlight for mobile */
+        * {
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        :root {
+            --neon-teal: #00ffcc;
+            --neon-purple: #9945ff;
+            --neon-pink: #ff0080;
+            --glass-bg: rgba(12, 12, 20, 0.4);
+            --glass-border: rgba(255, 255, 255, 0.08);
+        }
+
+        /* Animated gradient background */
+        @keyframes aurora {
+            0%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
+            33% { transform: translateY(-20px) rotate(120deg) scale(1.1); }
+            66% { transform: translateY(20px) rotate(240deg) scale(0.9); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        @keyframes glitch {
+            0%, 100% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: #000;
+            overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        /* Aurora Background */
+        .aurora-bg {
+            position: fixed;
+            inset: 0;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .aurora-bg::before,
+        .aurora-bg::after {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, var(--neon-teal) 0%, transparent 50%),
+                        radial-gradient(circle, var(--neon-purple) 0%, transparent 50%),
+                        radial-gradient(circle, var(--neon-pink) 0%, transparent 50%);
+            filter: blur(80px);
+            opacity: 0.3;
+            animation: aurora 20s ease-in-out infinite;
+        }
+
+        .aurora-bg::after {
+            animation-delay: -10s;
+            animation-direction: reverse;
+        }
+
+        /* Floating particles */
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--neon-teal);
+            border-radius: 50%;
+            filter: blur(1px);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        /* Glass morphism card */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px) saturate(200%);
+            -webkit-backdrop-filter: blur(20px) saturate(200%);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            box-shadow: 
+                0 0 40px rgba(0, 255, 204, 0.1),
+                0 0 80px rgba(153, 69, 255, 0.1),
+                inset 0 0 20px rgba(255, 255, 255, 0.03);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 404 Text Effect */
+        .error-404 {
+            font-size: clamp(80px, 20vw, 200px);
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--neon-teal), var(--neon-purple), var(--neon-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 60px rgba(0, 255, 204, 0.5);
+            animation: pulse-glow 3s ease-in-out infinite;
+            position: relative;
+            display: inline-block;
+        }
+
+        .error-404::before {
+            content: '404';
+            position: absolute;
+            left: 0;
+            top: 0;
+            -webkit-text-fill-color: transparent;
+            -webkit-text-stroke: 2px rgba(255, 255, 255, 0.1);
+            z-index: -1;
+            animation: glitch 2s infinite;
+        }
+
+        /* Neon text effects */
+        .neon-text {
+            background: linear-gradient(135deg, var(--neon-teal), var(--neon-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 40px rgba(0, 255, 204, 0.5);
+        }
+
+        /* Modern button */
+        .neon-button {
+            background: linear-gradient(135deg, var(--neon-teal), var(--neon-purple));
+            color: white;
+            font-weight: 600;
+            padding: 16px 40px;
+            border-radius: 9999px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.2s;
+            box-shadow: 
+                0 0 20px rgba(0, 255, 204, 0.3),
+                0 4px 15px rgba(0, 0, 0, 0.3);
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .neon-button::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s;
+        }
+
+        .neon-button:hover::before {
+            transform: translateX(100%);
+        }
+
+        .neon-button:hover {
+            transform: scale(1.05);
+            box-shadow: 
+                0 0 30px rgba(0, 255, 204, 0.5),
+                0 6px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .neon-button:active {
+            transform: scale(0.98);
+        }
+
+        /* Poetry quote styling */
+        .poem-quote {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: clamp(18px, 3vw, 24px);
+            line-height: 1.6;
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .neon-button {
+                padding: 12px 32px;
+                font-size: 16px;
+            }
+
+            .poem-quote {
+                padding: 0 20px;
+            }
+        }
+    </style>
+</head>
+<body class="text-gray-100 antialiased">
+    
+    <!-- Aurora Background -->
+    <div class="aurora-bg"></div>
+    
+    <!-- Floating Particles -->
+    <div id="particles"></div>
+    
+    <!-- Main Content -->
+    <div class="relative z-10 min-h-screen flex items-center justify-center p-4">
+        <div class="glass-card p-8 md:p-12 max-w-2xl w-full text-center">
+            
+            <!-- 404 Error -->
+            <div class="mb-6">
+                <h1 class="error-404">404</h1>
+            </div>
+            
+            <!-- Error Message -->
+            <h2 class="text-2xl md:text-4xl font-bold mb-4 neon-text">
+                Page Not Found
+            </h2>
+            
+            <!-- Poetic Message -->
+            <p class="poem-quote mb-8">
+                "Not all those who wander are lost,<br>
+                but this page seems to be."
+            </p>
+            
+            <p class="text-gray-400 mb-8 text-lg">
+                The verse you seek has drifted beyond the digital realm.
+            </p>
+            
+            <!-- Back Button -->
+            <a href="index.html" class="neon-button">
+                Return to Poems
+            </a>
+            
+            <!-- Additional Info -->
+            <div class="mt-12 pt-8 border-t border-gray-800">
+                <p class="text-sm text-gray-500">
+                    Lost in the aurora? Let's guide you back to poetry.
+                </p>
+            </div>
+            
+        </div>
+    </div>
+
+    <script>
+        // Generate floating particles
+        const particlesContainer = document.getElementById('particles');
+        for (let i = 0; i < 20; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.top = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 6 + 's';
+            particle.style.animationDuration = (Math.random() * 4 + 4) + 's';
+            
+            // Vary particle colors
+            const colors = ['#00ffcc', '#9945ff', '#ff0080'];
+            particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+            
+            particlesContainer.appendChild(particle);
+        }
+
+        // 3D card effect for desktop
+        const card = document.querySelector('.glass-card');
+        let isTouch = false;
+        
+        card.addEventListener('mousemove', (e) => {
+            if (isTouch) return;
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            const rotateX = (y - centerY) / centerY * -10;
+            const rotateY = (x - centerX) / centerX * 10;
+            
+            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        });
+
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0)';
+        });
+
+        // Detect touch device
+        card.addEventListener('touchstart', () => {
+            isTouch = true;
+        });
+    </script>
+</body>
+</html>
